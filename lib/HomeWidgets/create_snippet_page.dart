@@ -56,15 +56,14 @@ class CreateSnippetPage extends StatelessWidget {
                             SizedBox(
                               width: 300,
                               child: DropdownButtonFormField(
+                                hint: Text('Select a language'),
                                 items: [
                                   DropdownMenuItem(
-                                    onTap: () {},
-                                    value: 'Dart',
+                                    value: 'dart',
                                     child: Text('Dart'),
                                   ),
                                   DropdownMenuItem(
-                                    value: 'JavaScript',
-                                    onTap: () {},
+                                    value: 'javascript',
                                     child: Text('JavaScript'),
                                   ),
                                 ],
