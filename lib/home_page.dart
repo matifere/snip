@@ -19,8 +19,8 @@ class HomePage extends StatelessWidget {
           spacing: 16,
           children: [
             Text('Home', style: Theme.of(context).textTheme.displayLarge),
-            FutureBuilder(
-              future: obtenerTabla(),
+            StreamBuilder(
+              stream: obtenerTabla(),
               builder: (context, asyncSnapshot) {
                 if (asyncSnapshot.connectionState == ConnectionState.waiting) {
                   return CircularProgressIndicator();
@@ -45,8 +45,16 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Future<List<SnippetClass>> obtenerTabla() async {
-    final listaSupa = await client.from('snippets').select();
-    return listaSupa.map((mapa) => SnippetClass.fromJson(mapa)).toList();
+  //sin realtime:
+  //Future<List<SnippetClass>> obtenerTabla() async {
+  //    final listaSupa = await client.from('snippets').select();
+  //return listaSupa.map((mapa) => SnippetClass.fromJson(mapa)).toList();
+  //}
+
+  Stream<List<SnippetClass>> obtenerTabla() {
+    final listaSupa = client.from('snippets').stream(primaryKey: ['id']);
+    return listaSupa.map((listaDeMapas) {
+      return listaDeMapas.map((mapa) => SnippetClass.fromJson(mapa)).toList();
+    });
   }
 }

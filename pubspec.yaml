@@ -7,9 +7,12 @@ environment:
   sdk: ^3.10.7
 
 dependencies:
+  bloc: ^9.2.0
   code_text_field: ^1.1.0
+  equatable: ^2.0.8
   flutter:
     sdk: flutter
+  flutter_bloc: ^9.1.1
   flutter_dotenv: ^6.0.0
   flutter_highlight: ^0.7.0
   highlight: ^0.7.0
