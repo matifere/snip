@@ -2,11 +2,11 @@ import 'package:code_text_field/code_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_highlight/themes/monokai.dart';
+import 'package:highlight/languages/dart.dart';
 import 'package:snip/Cubit/snippet_cubit.dart';
 import 'package:snip/app_constants.dart';
 import 'package:snip/snippet_class.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:highlight/languages/dart.dart';
 import 'package:highlight/highlight_core.dart';
 
 class CreateSnippetPage extends StatefulWidget {
@@ -23,9 +23,7 @@ class _CreateSnippetPageState extends State<CreateSnippetPage> {
 
   final TextEditingController titleControl = TextEditingController();
 
-  final CodeController _codeController = CodeController(language: dart);
-
-  var dropSnips = [
+  List<DropdownMenuItem<String>> dropSnips = [
     DropdownMenuItem(value: 'Dart', child: Text('Dart')),
     DropdownMenuItem(value: 'JavaScript', child: Text('JavaScript')),
     DropdownMenuItem(value: 'Python', child: Text('Python')),
@@ -36,9 +34,35 @@ class _CreateSnippetPageState extends State<CreateSnippetPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => SnippetCubit(),
+      create: (_) => SnippetCubit(dart),
       child: BlocBuilder<SnippetCubit, Mode>(
         builder: (context, lang) {
+          final CodeController codeController = CodeController(language: lang);
+
+          List<SizedBox> hijos = [
+            SizedBox(
+              width: 300,
+              child: TextFormField(
+                controller: titleControl,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Title',
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 300,
+              child: DropdownButtonFormField(
+                key: ValueKey(lang),
+                initialValue: deModeAString(lang),
+                hint: Text('Select a language'),
+                items: dropSnips,
+                onChanged: (value) {
+                  context.read<SnippetCubit>().selectLang(value!);
+                },
+              ),
+            ),
+          ];
           return Scaffold(
             appBar: AppBar(
               title: Row(
@@ -59,51 +83,37 @@ class _CreateSnippetPageState extends State<CreateSnippetPage> {
                     ),
                     SizedBox(
                       height: 500,
-                      width: 900,
+                      width: MediaQuery.of(context).size.width * 0.7 > 500
+                          ? MediaQuery.of(context).size.width * 0.7
+                          : MediaQuery.of(context).size.width,
                       child: Card(
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
                             spacing: 8,
                             children: [
-                              Row(
-                                spacing: 16,
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    width: 300,
-                                    child: TextFormField(
-                                      controller: titleControl,
-                                      decoration: InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        hintText: 'Title',
-                                      ),
+                              MediaQuery.of(context).size.width * 0.7 > 650
+                                  ? Row(
+                                      spacing: 16,
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: hijos,
+                                    )
+                                  : Column(
+                                      spacing: 16,
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: hijos,
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: 300,
-                                    child: DropdownButtonFormField(
-                                      key: ValueKey(lang),
-                                      initialValue: deModeAString(lang),
-                                      hint: Text('Select a language'),
-                                      items: dropSnips,
-                                      onChanged: (value) {
-                                        context.read<SnippetCubit>().selectLang(
-                                          value!,
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
                               Expanded(
                                 child: SingleChildScrollView(
                                   child: CodeTheme(
                                     data: CodeThemeData(styles: monokaiTheme),
                                     child: CodeField(
                                       minLines: 20,
-                                      controller: _codeController,
+                                      controller: codeController,
                                     ),
                                   ),
                                 ),
@@ -127,7 +137,7 @@ class _CreateSnippetPageState extends State<CreateSnippetPage> {
                           onPressed: () async {
                             await postNewSnippet(
                               titleControl.text,
-                              _codeController.text,
+                              codeController.text,
                               deModeAString(lang),
                             );
                             if (!context.mounted) {

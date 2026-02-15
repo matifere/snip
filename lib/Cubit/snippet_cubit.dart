@@ -4,7 +4,7 @@ import 'package:highlight/languages/dart.dart';
 import 'package:snip/app_constants.dart';
 
 class SnippetCubit extends Cubit<Mode> {
-  SnippetCubit() : super(dart);
+  SnippetCubit(super.langPred);
   void selectLang(String lang) {
     emit(languageMap[lang] ?? dart);
   }
