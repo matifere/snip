@@ -54,7 +54,7 @@ class HomePage extends StatelessWidget {
                 return ValueListenableBuilder(
                   valueListenable: searchControll,
                   builder: (context, textValue, _) {
-                    var list = asyncSnapshot.data!
+                    List<SnippetClass> list = asyncSnapshot.data!
                         .where(
                           (value) => value.title.toLowerCase().contains(
                             textValue.text.toLowerCase(),

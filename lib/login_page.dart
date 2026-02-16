@@ -114,6 +114,12 @@ class LoginPage extends StatelessWidget {
                 },
                 child: Text('Submit'),
               ),
+              Text(
+                "A quick heads-up: passwords can't be recovered yet, so remember yours well.",
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: Colors.red),
+              ),
             ],
           ),
         ),
