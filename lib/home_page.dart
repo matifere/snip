@@ -9,6 +9,7 @@ class HomePage extends StatelessWidget {
   HomePage({super.key});
   final client = Supabase.instance.client;
 
+  final TextEditingController searchControll = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,9 +20,7 @@ class HomePage extends StatelessWidget {
             onPressed: () async {
               await Supabase.instance.client.auth.signOut();
 
-              // 2. Verificamos que el widget siga vivo antes de navegar
               if (context.mounted) {
-                // 3. Volvemos al Login y BORRAMOS el historial para que no pueda volver atrás con el botón 'Back'
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => LoginPage()),
                 );
@@ -36,6 +35,13 @@ class HomePage extends StatelessWidget {
           spacing: 16,
           children: [
             Text('Home', style: Theme.of(context).textTheme.displayLarge),
+            SizedBox(
+              width: 900,
+              child: TextFormField(
+                controller: searchControll,
+                decoration: InputDecoration(hintText: 'Search'),
+              ),
+            ),
             StreamBuilder(
               stream: obtenerTabla(),
               builder: (context, asyncSnapshot) {
@@ -45,7 +51,27 @@ class HomePage extends StatelessWidget {
                 if (asyncSnapshot.hasError) {
                   return Text('Error: ${asyncSnapshot.error}');
                 }
-                return SnipsContainer(snips: asyncSnapshot.data ?? []);
+                return ValueListenableBuilder(
+                  valueListenable: searchControll,
+                  builder: (context, textValue, _) {
+                    var list = asyncSnapshot.data!
+                        .where(
+                          (value) => value.title.toLowerCase().contains(
+                            textValue.text.toLowerCase(),
+                          ),
+                        )
+                        .toList();
+                    if (list.isEmpty) {
+                      return Center(
+                        child: Text(
+                          'Nothing here...',
+                          style: Theme.of(context).textTheme.displayMedium,
+                        ),
+                      );
+                    }
+                    return SnipsContainer(snips: list);
+                  },
+                );
               },
             ),
             FilledButton(

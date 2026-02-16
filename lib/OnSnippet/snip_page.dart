@@ -36,10 +36,9 @@ class _SnipPageState extends State<SnipPage> {
   @override
   void initState() {
     super.initState();
-    // Inicializamos con los datos que vienen "de fábrica" en el snippet
     _codeController = CodeController(
-      text: widget.snip.content, // Texto inicial
-      language: languageMap[widget.snip.language], // Lenguaje inicial
+      text: widget.snip.content,
+      language: languageMap[widget.snip.language],
     );
   }
 
