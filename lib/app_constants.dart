@@ -5,6 +5,7 @@ import 'package:highlight/languages/java.dart';
 import 'package:highlight/languages/javascript.dart';
 import 'package:highlight/languages/python.dart';
 import 'package:highlight/languages/rust.dart';
+import 'package:highlight/languages/sql.dart';
 
 final Map<String, Mode> languageMap = {
   'Dart': dart,
@@ -13,4 +14,5 @@ final Map<String, Mode> languageMap = {
   'JavaScript': javascript,
   'Java': java,
   'Haskell': haskell,
+  'SQL': sql,
 };

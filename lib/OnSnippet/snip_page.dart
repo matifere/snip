@@ -11,7 +11,7 @@ import 'package:snip/snippet_class.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SnipPage extends StatefulWidget {
-  SnipPage({super.key, required this.snip});
+  const SnipPage({super.key, required this.snip});
   final SnippetClass snip;
 
   @override
@@ -28,6 +28,7 @@ class _SnipPageState extends State<SnipPage> {
     DropdownMenuItem(value: 'Rust', child: Text('Rust')),
     DropdownMenuItem(value: 'Java', child: Text('Java')),
     DropdownMenuItem(value: 'Haskell', child: Text('Haskell')),
+    DropdownMenuItem(value: 'SQL', child: Text('SQL')),
   ];
 
   final TextEditingController titleControl = TextEditingController();

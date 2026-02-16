@@ -22,7 +22,10 @@ class LoginPage extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             spacing: 16,
             children: [
-              Text('Log in', style: Theme.of(context).textTheme.displayLarge),
+              Text(
+                'Log in / Register',
+                style: Theme.of(context).textTheme.displayLarge,
+              ),
               SizedBox(
                 width: 500,
                 child: TextFormField(
@@ -94,7 +97,7 @@ class LoginPage extends StatelessWidget {
                       if (!context.mounted) {
                         return;
                       }
-                      Navigator.of(context).push(
+                      Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) => HomePage()),
                       );
                     } catch (e) {

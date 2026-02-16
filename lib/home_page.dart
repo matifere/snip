@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:snip/HomeWidgets/create_snippet_page.dart';
 import 'package:snip/HomeWidgets/snips_container.dart';
+import 'package:snip/login_page.dart';
 import 'package:snip/snippet_class.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -13,6 +14,22 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Row(spacing: 8, children: [Icon(Icons.code), Text('Snip')]),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              await Supabase.instance.client.auth.signOut();
+
+              // 2. Verificamos que el widget siga vivo antes de navegar
+              if (context.mounted) {
+                // 3. Volvemos al Login y BORRAMOS el historial para que no pueda volver atrás con el botón 'Back'
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
+              }
+            },
+            icon: Icon(Icons.logout),
+          ),
+        ],
       ),
       body: Center(
         child: Column(

@@ -30,6 +30,7 @@ class _CreateSnippetPageState extends State<CreateSnippetPage> {
     DropdownMenuItem(value: 'Rust', child: Text('Rust')),
     DropdownMenuItem(value: 'Java', child: Text('Java')),
     DropdownMenuItem(value: 'Haskell', child: Text('Haskell')),
+    DropdownMenuItem(value: 'SQL', child: Text('SQL')),
   ];
   @override
   Widget build(BuildContext context) {
