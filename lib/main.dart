@@ -12,6 +12,15 @@ void main() async {
     url: dotenv.env['SUPABASE_URL'] ?? '',
     anonKey: dotenv.env['SUPABASE_ANON_KEY'] ?? '',
   );
+  /*
+  const supabaseUrl = String.fromEnvironment('SUPABASE_URL');
+  const supabaseKey = String.fromEnvironment('SUPABASE_ANON_KEY');
+
+  if (supabaseUrl.isEmpty) {
+    throw AssertionError('Falta la URL de Supabase');
+  }
+  await Supabase.initialize(url: supabaseUrl, anonKey: supabaseKey);
+*/
   runApp(MainApp());
 }
 
